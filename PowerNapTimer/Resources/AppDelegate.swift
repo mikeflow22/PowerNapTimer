@@ -23,6 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let error = error {
                 print("Error in \(#function) : \(error.localizedDescription)\n~~~\n\(error)")
             }
+            if !granted {
+                print("Notifications disabled sucka fool.")
+            }
         }
         return true
     }

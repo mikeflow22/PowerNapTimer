@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 class TimerViewController: UIViewController {
 
@@ -69,6 +70,33 @@ class TimerViewController: UIViewController {
         alert.addAction(snoozeAction)
         alert.addAction(dismissAction)
         present(alert, animated: true, completion: nil)
+    }
+    
+    //MARK: - Notifications
+    func scheduleNotification(){
+       let notificationContent = UNMutableNotificationContent()
+        notificationContent.title = "Wakey Wakey"
+        notificationContent.body = "get that money, honey!"
+        
+        
+        guard let timeRemaining = myTimer.timeRemaining else  { return }
+        
+        let fireDate = Date(timeInterval: timeRemaining, since: Date())
+        let dateComponents = Calendar.current.dateComponents([.minute, .second], from: fireDate)
+        let notificationTrigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+        let notificationRequest = UNNotificationRequest(identifier: userNotifictionIdentifier, content: notificationContent, trigger: notificationTrigger)
+        UNUserNotificationCenter.current().add(notificationRequest) { (error) in
+            if let error = error {
+                print("Error in \(#function) : \(error.localizedDescription)\n~~~\n\(error)")
+            }
+        }
+    }
+    
+    //move later
+    fileprivate  let userNotifictionIdentifier = "timerNotification"
+    
+    func cancelNotification(){
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [userNotifictionIdentifier])
     }
 }
 extension TimerViewController: TimerDelegate {
