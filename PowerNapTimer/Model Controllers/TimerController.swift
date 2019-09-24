@@ -27,7 +27,7 @@ class TimerController {
     func secondTicking(){
         //want to see how much time is remaining
         guard let timeLeft = timeRemaining else { return }
-        if timeLeft < 0 {
+        if timeLeft > 0 {
             self.timeRemaining = timeLeft - 1
             //Alert the delegate to do some stuff in this function.
             delegate?.timerSecondTick()
@@ -61,7 +61,12 @@ class TimerController {
         }
     }
     
-    
+    func timeAsString() -> String {
+        let timeLeft = Int(self.timeRemaining ?? 20 * 60) //20 mins
+        let minutesLeft = timeLeft / 60
+        let secondsLeft = timeLeft - (minutesLeft * 60)
+        return String(format: "%02d : %02d", arguments: [minutesLeft, secondsLeft])
+    }
     
     
     
