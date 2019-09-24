@@ -20,6 +20,10 @@ class TimerController {
     var timeRemaining: TimeInterval?
     weak var delegate: TimerDelegate?
     
+    var isOn: Bool {
+        return timeRemaining != nil ? true : false
+    }
+    
     func secondTicking(){
         //want to see how much time is remaining
         guard let timeLeft = timeRemaining else { return }
@@ -38,11 +42,23 @@ class TimerController {
     }
     
     func startTimer(_ time: TimeInterval) {
-        
+        if isOn == false {
+            timeRemaining = time
+            DispatchQueue.main.async {
+                self.secondTicking()
+                self.timer =  Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { (_) in
+                    self.secondTicking()
+                })
+            }
+        }
     }
     
     func stopTimer(){
-        
+        if isOn == true {
+            timeRemaining = nil
+            timer?.invalidate()
+            delegate?.timerStopped()
+        }
     }
     
     
