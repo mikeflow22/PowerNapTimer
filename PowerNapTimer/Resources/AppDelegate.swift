@@ -20,7 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //get the usernotification  framework
         UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .sound, .criticalAlert, .alert]) { (granted, error) in
-            <#code#>
+            if let error = error {
+                print("Error in \(#function) : \(error.localizedDescription)\n~~~\n\(error)")
+            }
         }
         return true
     }
